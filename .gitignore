@@ -9,7 +9,12 @@ env
 bin
 obj
 
-
+# AI / ML Data (Heavy Files)
+data.csv
+*.pkl
+*.pyc
+__pycache__/
+.ipynb_checkpoints
 
 # Logs
 logs
