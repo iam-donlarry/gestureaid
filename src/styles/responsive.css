@@ -1,0 +1,265 @@
+/* ===== Responsive Design System ===== */
+/* Breakpoints: Mobile ≤480px | Tablet 481–1024px | Desktop 1025px+ */
+
+/* --- App Layout --- */
+.app-main {
+  display: grid;
+  grid-template-columns: minmax(300px, 1fr) 2fr;
+  gap: 24px;
+}
+
+.app-header {
+  padding: 40px 0;
+  text-align: center;
+}
+
+.app-header-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  background: linear-gradient(to right, var(--primary), var(--secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.app-header-sub {
+  color: var(--text-muted);
+  margin-top: 8px;
+}
+
+.app-footer {
+  margin-top: auto;
+  padding: 40px 0;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+.app-aside {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* --- Email Dashboard --- */
+.email-dashboard {
+  min-height: 500px;
+  display: flex;
+  overflow: hidden;
+  position: relative;
+}
+
+.email-sidebar {
+  width: 240px;
+  border-right: 1px solid var(--surface-border);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.email-sidebar .btn-label {
+  display: inline;
+}
+
+.email-compose-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  padding: 16px;
+}
+
+.email-compose-modal {
+  max-width: 600px;
+  width: 100%;
+  background: var(--background);
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.email-preview-text {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+/* --- Gesture Engine --- */
+.gesture-panel {
+  padding: 24px;
+  position: relative;
+}
+
+.gesture-info-grid {
+  margin-top: 16px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.gesture-transcription-overlay {
+  position: absolute;
+  bottom: 16px;
+  left: 16px;
+  right: 16px;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(8px);
+  padding: 12px 16px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  min-height: 50px;
+  max-height: 120px;
+  overflow-y: auto;
+}
+
+/* --- Speech Module --- */
+.speech-panel {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ========== TABLET (481px – 1024px) ========== */
+@media (max-width: 1024px) {
+  .app-main {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .app-header {
+    padding: 24px 16px;
+  }
+
+  .app-header-title {
+    font-size: 2rem;
+  }
+
+  .app-footer {
+    padding: 24px 16px;
+    font-size: 0.8rem;
+  }
+
+  .email-dashboard {
+    min-height: auto;
+    flex-direction: column;
+  }
+
+  .email-sidebar {
+    width: 100%;
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding: 12px 16px;
+    border-right: none;
+    border-bottom: 1px solid var(--surface-border);
+    align-items: center;
+  }
+
+  .email-sidebar .btn {
+    flex: 0 0 auto;
+    padding: 8px 14px;
+    font-size: 0.85rem;
+  }
+
+  .email-sidebar .btn[style*="margin-top: auto"] {
+    margin-top: 0 !important;
+    margin-left: auto;
+  }
+
+  .email-compose-modal {
+    padding: 24px;
+  }
+
+  .gesture-panel {
+    padding: 16px;
+  }
+
+  .speech-panel {
+    padding: 16px;
+  }
+}
+
+/* ========== MOBILE (≤480px) ========== */
+@media (max-width: 480px) {
+  .app-main {
+    gap: 16px;
+  }
+
+  .app-header {
+    padding: 20px 12px;
+  }
+
+  .app-header-title {
+    font-size: 1.5rem;
+  }
+
+  .app-header-sub {
+    font-size: 0.85rem;
+  }
+
+  .app-footer {
+    padding: 20px 12px;
+    font-size: 0.75rem;
+  }
+
+  .email-sidebar {
+    padding: 10px 12px;
+    gap: 6px;
+  }
+
+  .email-sidebar .btn-label {
+    display: none;
+  }
+
+  .email-sidebar .btn {
+    padding: 8px 10px;
+    font-size: 0.8rem;
+    gap: 4px;
+  }
+
+  .email-compose-modal {
+    padding: 16px;
+    gap: 14px;
+  }
+
+  .gesture-panel {
+    padding: 12px;
+  }
+
+  .gesture-info-grid {
+    gap: 6px;
+  }
+
+  .gesture-info-grid .glass {
+    padding: 8px !important;
+    font-size: 0.65rem !important;
+  }
+
+  .gesture-transcription-overlay {
+    bottom: 8px;
+    left: 8px;
+    right: 8px;
+    padding: 8px 12px;
+    min-height: 40px;
+    max-height: 80px;
+  }
+
+  .speech-panel {
+    padding: 12px;
+    gap: 12px;
+  }
+
+  .container {
+    padding: 12px;
+  }
+}
