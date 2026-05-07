@@ -6,3 +6,4 @@ pandas
 scikit-learn
 mediapipe
 python-socketio
+python-dotenv

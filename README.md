@@ -23,6 +23,13 @@ Install the required machine learning and server libraries:
 pip install -r requirements.txt
 ```
 
+**Environment Configuration:**
+Create a `.env` file in the root directory with your email credentials:
+```env
+SENDER_EMAIL=your-email@gmail.com
+APP_PASSWORD=your-app-password
+```
+
 ### 4. Running the Application
 
 You need to start **two** processes:
@@ -39,7 +46,7 @@ npm run dev
 ```
 
 ### 📧 Email Integration
-This app uses Gmail SMTP to send messages. The sender email and app password are pre-configured in `scripts/predict_server.py`. 
+This app uses Gmail SMTP to send messages. Configuration is handled via environment variables in a `.env` file for better security.
 
 ### 🧠 Training New Gestures
 1.  Open the app and click **"TRAIN ENGINE"**.

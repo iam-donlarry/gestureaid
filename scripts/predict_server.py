@@ -7,10 +7,14 @@ import smtplib
 from email.mime.text import MIMEText
 from flask import Flask, jsonify
 from flask_socketio import SocketIO
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
 
 # --- CONFIGURATION ---
-SENDER_EMAIL = "adekunleolanrewaju51@gmail.com"
-APP_PASSWORD = "vtcsdnnprjvxuymy" # Spaces removed
+SENDER_EMAIL = os.getenv("SENDER_EMAIL")
+APP_PASSWORD = os.getenv("APP_PASSWORD")
 MODEL_PATH = 'gesture_model.pkl'
 DATA_PATH = 'data.csv'
 
