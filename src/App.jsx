@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react'
 import './App.css'
 import EmailDashboard from './components/EmailDashboard'
 import GestureEngine from './components/GestureEngine'
+import SpeechModule from './components/SpeechModule'
 
 function App() {
   const [gesture, setGesture] = useState(null)
@@ -37,6 +38,16 @@ function App() {
     })
   }
 
+  // Handle speech-to-text input
+  const handleSpeechTranscription = (speechText) => {
+    setTranscription(prev => {
+      const trimmed = speechText.trim()
+      if (!trimmed) return prev
+      const separator = prev.endsWith(" ") || prev === "" ? "" : " "
+      return prev + separator + trimmed
+    })
+  }
+
   return (
     <div className="premium-container">
       <header style={{ marginBottom: '40px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
@@ -54,12 +65,13 @@ function App() {
 
       <main style={{ display: 'grid', gridTemplateColumns: '1fr 1.2fr', gap: '32px', alignItems: 'start' }}>
         {/* Left Side: Camera & AI Control */}
-        <div className="animate-fade-in" style={{ animationDelay: '0.1s' }}>
+        <div className="animate-fade-in" style={{ display: 'flex', flexDirection: 'column', gap: '24px', animationDelay: '0.1s' }}>
           <GestureEngine 
             onGesture={handleGesture} 
             currentText={transcription} 
             onLandmarks={setLatestLandmarks}
           />
+          <SpeechModule onTranscription={handleSpeechTranscription} />
         </div>
         
         {/* Right Side: Professional Drafting Board */}
