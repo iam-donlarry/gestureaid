@@ -145,9 +145,29 @@ function EmailDashboard({ currentGesture, transcription, onTranscriptionChange }
 
       <div className="input-group">
         <label className="input-label"><Terminal size={12} style={{ verticalAlign: 'middle', marginRight: '6px' }} /> Message Content</label>
-        <div className="drafting-area">
-          {transcription || <span style={{ color: 'rgba(255,255,255,0.2)' }}>Transcribing gesture input...</span>}
-        </div>
+        <textarea 
+          className="drafting-area"
+          placeholder="Transcribing gesture input..."
+          value={transcription}
+          onChange={(e) => onTranscriptionChange(e.target.value)}
+          onKeyDown={(e) => {
+            // Allow Backspace (length > 1) and Space (' ')
+            // Block all other single-character inputs (letters, numbers, symbols)
+            if (e.key.length === 1 && e.key !== ' ' && !e.ctrlKey && !e.metaKey) {
+              e.preventDefault()
+            }
+            // Block Enter key to keep it strictly gesture-based + backspace/space
+            if (e.key === 'Enter') {
+              e.preventDefault()
+            }
+          }}
+          onPaste={(e) => e.preventDefault()}
+          style={{ 
+            width: '100%', 
+            resize: 'vertical',
+            fontFamily: 'inherit'
+          }}
+        />
       </div>
 
       <div style={{ marginTop: '32px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>

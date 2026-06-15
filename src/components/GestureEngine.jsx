@@ -211,81 +211,109 @@ function GestureEngine({ onGesture, currentText, onLandmarks }) {
               <Zap size={24} color={mlPredictionState === 'searching' ? 'var(--border)' : 'var(--primary)'} className={mlPredictionState !== 'searching' ? 'animate-pulse' : ''} />
             </div>
           </div>
+        ) : isCollecting ? (
+          <div style={{ position: 'absolute', bottom: '20px', left: '20px', right: '20px' }}>
+            <div style={{ background: 'rgba(239, 68, 68, 0.85)', backdropFilter: 'blur(10px)', padding: '12px 16px', borderRadius: '14px', border: '1px solid var(--accent-error)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <div>
+                <div style={{ fontSize: '0.6rem', color: '#ffb3b3', fontWeight: 800, textTransform: 'uppercase', marginBottom: '4px' }}>DATA COLLECTION ACTIVE</div>
+                <div style={{ fontSize: '1.1rem', fontWeight: 800, color: '#fff' }}>
+                  RECORDING: {collectLabel}
+                </div>
+              </div>
+              <div className="animate-pulse" style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#fff' }} />
+            </div>
+          </div>
         ) : (
-          <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.8)', backdropFilter: 'blur(8px)', padding: '24px', overflowY: 'auto' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '20px' }}>
-              <Database size={16} color="var(--primary)" />
-              <h3 style={{ fontSize: '0.9rem', fontWeight: 800 }}>DATASET CONTROL</h3>
+          <div style={{ position: 'absolute', bottom: '20px', left: '20px', right: '20px' }}>
+            <div style={{ background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(10px)', padding: '12px 16px', borderRadius: '14px', border: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <div>
+                <div style={{ fontSize: '0.6rem', color: 'var(--text-muted)', fontWeight: 800, textTransform: 'uppercase', marginBottom: '4px' }}>TRAINING MODE ACTIVE</div>
+                <div style={{ fontSize: '1rem', fontWeight: 800, color: 'var(--primary)' }}>
+                  READY FOR CAPTURE
+                </div>
+              </div>
+              <Database size={18} color="var(--primary)" />
             </div>
-            
-            <div style={{ display: 'flex', gap: '10px', marginBottom: '20px' }}>
-              <input 
-                className="premium-input"
-                placeholder="New Label (e.g. SPACE)" 
-                value={newLabel}
-                onChange={(e) => setNewLabel(e.target.value.toUpperCase())}
-                style={{ fontSize: '0.8rem', padding: '10px' }}
-              />
-              <button 
-                onMouseDown={() => startCollection(newLabel)}
-                onMouseUp={stopCollection}
-                disabled={!newLabel}
-                className="action-button"
-                style={{ background: isCollecting ? 'var(--accent-error)' : 'var(--primary)', padding: '0 15px', borderRadius: '10px', fontSize: '0.7rem' }}
-              >
-                {isCollecting ? 'RECORDING' : 'CAPTURE'}
-              </button>
-            </div>
-
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr auto auto', gap: '10px' }}>
-              {Object.entries(dataSummary).map(([label, count]) => (
-                <React.Fragment key={label}>
-                  <div style={{ padding: '10px', background: 'rgba(255,255,255,0.03)', borderRadius: '8px', fontSize: '0.75rem', display: 'flex', justifyContent: 'space-between' }}>
-                    <span style={{ fontWeight: 700 }}>{label}</span>
-                    <span style={{ color: 'var(--text-muted)' }}>{count} SAMPLES</span>
-                  </div>
-                  <button 
-                    onMouseDown={() => startCollection(label)}
-                    onMouseUp={stopCollection}
-                    className="glass"
-                    style={{ padding: '0 12px', fontSize: '0.6rem', background: isCollecting && collectLabel === label ? 'var(--accent-error)' : 'rgba(255,255,255,0.05)', borderRadius: '8px' }}
-                  >
-                    ADD
-                  </button>
-                  <button 
-                    onClick={() => deleteLabel(label)}
-                    className="glass"
-                    style={{ padding: '0 12px', fontSize: '0.6rem', color: 'var(--accent-error)', background: 'rgba(255,0,0,0.05)', borderRadius: '8px' }}
-                  >
-                    <Trash2 size={12} />
-                  </button>
-                </React.Fragment>
-              ))}
-            </div>
-
-            <button 
-              onClick={trainModel}
-              disabled={isTraining || Object.keys(dataSummary).length < 2}
-              className="action-button"
-              style={{ width: '100%', marginTop: '24px', background: 'var(--accent-success)', fontSize: '0.8rem' }}
-            >
-              {isTraining ? 'COMPILING MODEL...' : 'RE-TRAIN NEURAL ENGINE'}
-            </button>
           </div>
         )}
       </div>
 
-      {/* Technical Cheat Sheet */}
-      <div style={{ marginTop: '20px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
-        <div style={{ padding: '12px', background: 'rgba(255,255,255,0.02)', borderRadius: '12px', border: '1px solid var(--border)' }}>
-          <div style={{ fontSize: '0.6rem', color: 'var(--text-muted)', fontWeight: 800, marginBottom: '4px' }}>GESTURE CMD</div>
-          <div style={{ fontSize: '0.75rem', fontWeight: 600 }}>'SPACE' ➔ ADD SPACE</div>
+      {/* Conditional Bottom Section */}
+      {!trainMode ? (
+        /* Technical Cheat Sheet */
+        <div style={{ marginTop: '20px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+          <div style={{ padding: '12px', background: 'rgba(255,255,255,0.02)', borderRadius: '12px', border: '1px solid var(--border)' }}>
+            <div style={{ fontSize: '0.6rem', color: 'var(--text-muted)', fontWeight: 800, marginBottom: '4px' }}>GESTURE CMD</div>
+            <div style={{ fontSize: '0.75rem', fontWeight: 600 }}>'SPACE' ➔ ADD SPACE</div>
+          </div>
+          <div style={{ padding: '12px', background: 'rgba(255,255,255,0.02)', borderRadius: '12px', border: '1px solid var(--border)' }}>
+            <div style={{ fontSize: '0.6rem', color: 'var(--text-muted)', fontWeight: 800, marginBottom: '4px' }}>EXECUTION</div>
+            <div style={{ fontSize: '0.75rem', fontWeight: 600 }}>'SEND' ➔ INSTANT MAIL</div>
+          </div>
         </div>
-        <div style={{ padding: '12px', background: 'rgba(255,255,255,0.02)', borderRadius: '12px', border: '1px solid var(--border)' }}>
-          <div style={{ fontSize: '0.6rem', color: 'var(--text-muted)', fontWeight: 800, marginBottom: '4px' }}>EXECUTION</div>
-          <div style={{ fontSize: '0.75rem', fontWeight: 600 }}>'SEND' ➔ INSTANT MAIL</div>
+      ) : (
+        /* Dataset Control Panel */
+        <div style={{ marginTop: '20px', padding: '20px', background: 'rgba(255,255,255,0.02)', borderRadius: '18px', border: '1px solid var(--border)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
+            <Database size={16} color="var(--primary)" />
+            <h3 style={{ fontSize: '0.9rem', fontWeight: 800 }}>DATASET CONTROL</h3>
+          </div>
+          
+          <div style={{ display: 'flex', gap: '10px', marginBottom: '16px' }}>
+            <input 
+              className="premium-input"
+              placeholder="New Label (e.g. SPACE)" 
+              value={newLabel}
+              onChange={(e) => setNewLabel(e.target.value.toUpperCase())}
+              style={{ fontSize: '0.8rem', padding: '10px 14px' }}
+            />
+            <button 
+              onMouseDown={() => startCollection(newLabel)}
+              onMouseUp={stopCollection}
+              disabled={!newLabel}
+              className="action-button"
+              style={{ background: isCollecting ? 'var(--accent-error)' : 'var(--primary)', padding: '0 15px', borderRadius: '10px', fontSize: '0.7rem' }}
+            >
+              {isCollecting ? 'RECORDING' : 'CAPTURE'}
+            </button>
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr auto auto', gap: '8px', maxHeight: '180px', overflowY: 'auto', paddingRight: '4px' }}>
+            {Object.entries(dataSummary).map(([label, count]) => (
+              <React.Fragment key={label}>
+                <div style={{ padding: '8px 12px', background: 'rgba(255,255,255,0.03)', borderRadius: '8px', fontSize: '0.75rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <span style={{ fontWeight: 700 }}>{label}</span>
+                  <span style={{ color: 'var(--text-muted)', fontSize: '0.65rem' }}>{count} SAMPLES</span>
+                </div>
+                <button 
+                  onMouseDown={() => startCollection(label)}
+                  onMouseUp={stopCollection}
+                  className="glass"
+                  style={{ padding: '0 12px', fontSize: '0.6rem', background: isCollecting && collectLabel === label ? 'var(--accent-error)' : 'rgba(255,255,255,0.05)', borderRadius: '8px', cursor: 'pointer' }}
+                >
+                  ADD
+                </button>
+                <button 
+                  onClick={() => deleteLabel(label)}
+                  className="glass"
+                  style={{ padding: '0 12px', fontSize: '0.6rem', color: 'var(--accent-error)', background: 'rgba(255,0,0,0.05)', borderRadius: '8px', cursor: 'pointer' }}
+                >
+                  <Trash2 size={12} />
+                </button>
+              </React.Fragment>
+            ))}
+          </div>
+
+          <button 
+            onClick={trainModel}
+            disabled={isTraining || Object.keys(dataSummary).length < 2}
+            className="action-button"
+            style={{ width: '100%', marginTop: '16px', background: 'var(--accent-success)', fontSize: '0.8rem', padding: '12px 24px' }}
+          >
+            {isTraining ? 'COMPILING MODEL...' : 'RE-TRAIN NEURAL ENGINE'}
+          </button>
         </div>
-      </div>
+      )}
     </div>
   )
 }

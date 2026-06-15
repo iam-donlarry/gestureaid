@@ -154,9 +154,17 @@ h1, h2, h3 {
   color: var(--text-main);
   position: relative;
   box-shadow: inset 0 4px 12px rgba(0,0,0,0.3);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.drafting-area::after {
+.drafting-area:focus {
+  outline: none;
+  border-color: var(--primary);
+  background: rgba(99, 102, 241, 0.08);
+  box-shadow: 0 0 25px var(--primary-glow), inset 0 4px 12px rgba(0,0,0,0.2);
+}
+
+div.drafting-area::after {
   content: '';
   display: inline-block;
   width: 3px;
