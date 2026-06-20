@@ -4,7 +4,6 @@ import { Mic, MicOff } from 'lucide-react'
 function SpeechModule({ onTranscription }) {
   const [isListening, setIsListening] = useState(false)
   const [error, setError] = useState(null)
-  const [interimText, setInterimText] = useState('')
   const recognitionRef = useRef(null)
 
   useEffect(() => {
@@ -21,26 +20,11 @@ function SpeechModule({ onTranscription }) {
     recognitionRef.current.lang = 'en-US'
 
     recognitionRef.current.onresult = (event) => {
-      let finalSpeech = ""
-      let interimSpeech = ""
-
+      let currentTranscription = ""
       for (let i = event.resultIndex; i < event.results.length; i++) {
-        const transcript = event.results[i][0].transcript
-        if (event.results[i].isFinal) {
-          finalSpeech += transcript
-        } else {
-          interimSpeech += transcript
-        }
+        currentTranscription += event.results[i][0].transcript
       }
-
-      if (interimSpeech) {
-        setInterimText(interimSpeech)
-      }
-      
-      if (finalSpeech) {
-        setInterimText("")
-        onTranscription(finalSpeech)
-      }
+      onTranscription(currentTranscription)
     }
 
     recognitionRef.current.onerror = (event) => {
@@ -51,11 +35,7 @@ function SpeechModule({ onTranscription }) {
 
     recognitionRef.current.onend = () => {
       if (isListening) {
-        try {
-          recognitionRef.current.start() // Auto-restart if we want continuous listening
-        } catch (err) {
-          console.error("Auto-restart failed:", err)
-        }
+        recognitionRef.current.start() // Auto-restart if we want continuous listening
       }
     }
 
@@ -64,13 +44,12 @@ function SpeechModule({ onTranscription }) {
         recognitionRef.current.stop()
       }
     }
-  }, [onTranscription, isListening])
+  }, [onTranscription])
 
   const toggleListening = () => {
     if (isListening) {
       recognitionRef.current.stop()
       setIsListening(false)
-      setInterimText("")
     } else {
       setError(null)
       try {
@@ -83,45 +62,33 @@ function SpeechModule({ onTranscription }) {
   }
 
   return (
-    <div className="glass-panel speech-panel" style={{ padding: '24px', position: 'relative', overflow: 'hidden' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <div style={{ padding: '8px', background: 'var(--primary-glow)', borderRadius: '10px' }}>
-            <Mic size={18} color="var(--primary)" />
-          </div>
-          <span style={{ fontSize: '0.8rem', fontWeight: 800, letterSpacing: '0.1em' }}>SPEECH INPUT</span>
-        </div>
-        <div style={{ padding: '4px 10px', borderRadius: '6px', background: isListening ? 'rgba(16, 185, 129, 0.15)' : 'rgba(255,255,255,0.05)', color: isListening ? 'var(--accent-success)' : 'var(--text-muted)', fontSize: '0.65rem', textTransform: 'uppercase', fontWeight: 800 }}>
-          {isListening ? 'LIVE' : 'OFFLINE'}
+    <div className="glass speech-panel">
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <h3 style={{ fontSize: '1.1rem', fontWeight: 600 }}>Speech Input</h3>
+        <div style={{ padding: '4px 8px', borderRadius: '4px', background: isListening ? 'var(--success)' : 'var(--surface)', fontSize: '0.7rem', textTransform: 'uppercase', fontWeight: 'bold' }}>
+          {isListening ? 'Live' : 'Off'}
         </div>
       </div>
 
       <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
         <button 
           onClick={toggleListening}
-          className="action-button"
-          style={{ 
-            width: '52px', 
-            height: '52px', 
-            borderRadius: '50%', 
-            padding: 0, 
-            background: isListening ? 'var(--accent-error)' : 'linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%)',
-            boxShadow: isListening ? '0 10px 20px rgba(239, 68, 68, 0.3)' : '0 10px 20px rgba(99, 102, 241, 0.3)'
-          }}
+          className={`btn ${isListening ? '' : 'btn-secondary'}`}
+          style={{ width: '56px', height: '56px', borderRadius: '50%', padding: 0, justifyContent: 'center', background: isListening ? 'var(--error)' : 'var(--primary)' }}
         >
-          {isListening ? <MicOff size={20} /> : <Mic size={20} />}
+          {isListening ? <MicOff size={24} /> : <Mic size={24} />}
         </button>
         
         <div style={{ flex: 1 }}>
-          <div style={{ fontSize: '0.85rem', fontWeight: 600, color: interimText ? 'var(--primary-bright)' : 'var(--text-main)', marginBottom: '6px', minHeight: '18px', fontStyle: interimText ? 'italic' : 'normal' }}>
-            {isListening ? (interimText ? `"${interimText}..."` : 'Listening for voice...') : 'Voice transcription inactive'}
+          <div style={{ fontSize: '0.9rem', marginBottom: '4px' }}>
+            {isListening ? 'Listening for voice...' : 'Voice transcription inactive'}
           </div>
-          <div style={{ height: '4px', background: 'rgba(255,255,255,0.05)', borderRadius: '2px', overflow: 'hidden' }}>
+          <div style={{ height: '4px', background: 'var(--surface)', borderRadius: '2px', overflow: 'hidden' }}>
             {isListening && (
               <div 
                 style={{ 
                   height: '100%', 
-                  background: 'var(--accent-success)', 
+                  background: 'var(--success)', 
                   width: '100%', 
                   animation: 'pulse 1.5s infinite ease-in-out' 
                 }} 
@@ -132,7 +99,7 @@ function SpeechModule({ onTranscription }) {
       </div>
 
       {error && (
-        <div style={{ color: 'var(--accent-error)', fontSize: '0.75rem', marginTop: '12px', fontWeight: 600 }}>
+        <div style={{ color: 'var(--error)', fontSize: '0.8rem', marginTop: '8px' }}>
           {error}
         </div>
       )}
